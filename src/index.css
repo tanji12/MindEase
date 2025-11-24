@@ -1,0 +1,125 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    /* Calming pastel blue theme for Sukun Mind Relaxer */
+    --background: 210 40% 98%;
+    --foreground: 215 25% 27%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 215 25% 27%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 215 25% 27%;
+
+    /* Soft blue primary color */
+    --primary: 210 100% 70%;
+    --primary-foreground: 0 0% 100%;
+    
+    /* Light blue secondary */
+    --secondary: 210 60% 92%;
+    --secondary-foreground: 215 25% 27%;
+
+    /* Very light muted backgrounds */
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
+
+    /* Gentle accent */
+    --accent: 200 80% 85%;
+    --accent-foreground: 215 25% 27%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 210 30% 88%;
+    --input: 210 30% 88%;
+    --ring: 210 100% 70%;
+
+    --radius: 0.75rem;
+
+    /* Custom calming colors */
+    --calm-blue: 210 100% 70%;
+    --soft-blue: 210 60% 92%;
+    --peaceful-gradient-start: 210 100% 95%;
+    --peaceful-gradient-end: 200 80% 90%;
+  }
+
+  .dark {
+    --background: 215 28% 17%;
+    --foreground: 210 40% 98%;
+
+    --card: 215 28% 20%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 215 28% 20%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 210 100% 70%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 215 28% 25%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 215 28% 25%;
+    --muted-foreground: 215 20% 65%;
+
+    --accent: 200 60% 40%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62% 50%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 215 28% 30%;
+    --input: 215 28% 30%;
+    --ring: 210 100% 70%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    min-height: 100vh;
+  }
+}
+
+@layer utilities {
+  .peaceful-gradient {
+    background: linear-gradient(135deg, hsl(var(--peaceful-gradient-start)), hsl(var(--peaceful-gradient-end)));
+  }
+  
+  .smooth-transition {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .star-layer {
+    will-change: transform;
+  }
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0) translateX(0) scale(1);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100vh) translateX(var(--float-x, 0)) scale(0.8);
+    opacity: 0;
+  }
+}
