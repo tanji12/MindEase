@@ -17,7 +17,7 @@ const supabase = createClient(SUPABASE_URL, SERVICE_ROLE_KEY, {
 });
 
 async function run() {
-  const email = 'emamul25562@gmail.com';
+  const email = 'mindease.baust@gmail.com';
   const password = 'Admin11';
 
   console.log('Creating/updating admin user:', email);
