@@ -40,7 +40,6 @@ const Admin = () => {
   const [mood, setMood] = useState<"relax" | "sad" | "happy" | "stressed" | "motivated">("relax");
   const [body, setBody] = useState("");
   const [file, setFile] = useState<File | null>(null);
-  // Default cleared to avoid accidental mismatches with seeded admin email
   const [email, setEmail] = useState("mindease.baust@gmail.com");
   const [password, setPassword] = useState("Admin11");
   const [signingIn, setSigningIn] = useState(false);
@@ -59,8 +58,6 @@ const Admin = () => {
         .eq("role", "admin")
         .maybeSingle();
 
-      // Debug logging to help trace permission issues in the browser console.
-      // This will show the current user id, any returned data, and any error.
       console.log("Admin check response:", {
         userId: user.id,
         data,
@@ -80,16 +77,11 @@ const Admin = () => {
   }, [user]);
 
   useEffect(() => {
-    // If not authenticated, show the sign-in form on this page instead of redirecting.
-    // If authenticated but not an admin, perform one quick re-check before redirecting
-    // to avoid premature redirects when roles are just being assigned server-side.
     if (!authLoading && !user) {
       return;
     } else if (!checkingAdmin && !isAdmin && user) {
       (async () => {
         try {
-          // Re-check the user_roles table once immediately. If the role has been
-          // added since the first check, grant access without redirecting.
           const { data: latest, error: latestErr } = await supabase
             .from("user_roles")
             .select("role")
@@ -108,8 +100,6 @@ const Admin = () => {
         } catch (e) {
           console.error("Failed to re-check admin role:", e);
         }
-
-        // If still not admin after the quick re-check, redirect with a toast.
         navigate("/");
         toast({
           title: "Access Denied",
@@ -202,8 +192,6 @@ const Admin = () => {
         .from(bucketName)
         .getPublicUrl(filePath);
 
-      // Build insert payload without `body` field to remain compatible
-      // if the DB schema hasn't been migrated yet.
       const fileInsertPayload: any = {
         title,
         description: description.trim() || null,
@@ -215,12 +203,8 @@ const Admin = () => {
         uploaded_by: user!.id,
       };
 
-      // Helper that attempts to insert and, if the error indicates a missing
-      // column in the schema cache (e.g. content_type, mood, body), retries
-      // the insert removing those keys so clients without updated DB schema
-      // still work.
+  
       const safeInsert = async (payload: any) => {
-        // first attempt
         const res1: any = await (supabase as any).from('admin_content').insert(payload);
         if (!res1?.error) return res1;
 
@@ -234,7 +218,6 @@ const Admin = () => {
 
         if (missingCols.length === 0) return res1;
 
-        // remove missing keys from payload and retry
         const cleaned = { ...payload };
         missingCols.forEach((col) => {
           if (col in cleaned) delete cleaned[col];
@@ -280,8 +263,6 @@ const Admin = () => {
 
     setUploading(true);
     try {
-      // For text-only uploads, store the main content in `description` to
-      // remain compatible with databases that don't yet have the `body` column.
       const textPayload: any = {
         title,
         description: body.trim() || description.trim() || null,
@@ -293,7 +274,6 @@ const Admin = () => {
         uploaded_by: user!.id,
       };
 
-      // Reuse safeInsert helper to handle missing columns gracefully
       const safeInsert = async (payload: any) => {
         const res1: any = await (supabase as any).from('admin_content').insert(payload);
         if (!res1?.error) return res1;

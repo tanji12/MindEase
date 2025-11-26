@@ -98,10 +98,9 @@ const Dashboard = () => {
   const handleContentTypeToggle = (type: ContentType) => {
     setSelectedContentTypes((prev) => {
       const newSet = new Set<ContentType>();
-      // If the clicked type was already selected, toggle it off (empty selection).
-      // Otherwise select only this type (radio-like behaviour).
+    
       if (prev.has(type)) {
-        // return empty set
+      
         return newSet;
       }
 
@@ -175,7 +174,7 @@ const Dashboard = () => {
       }
 
       const type = Array.from(selectedContentTypes)[0];
-      // Clear previous content immediately so UI reflects a pending change
+
       setCurrentContent([]);
       setLoadingRecommendations(true);
       try {
@@ -193,7 +192,6 @@ const Dashboard = () => {
           console.error('Error fetching recommendations:', error);
           setCurrentContent([]);
         } else {
-          // Map DB rows to Content interface used by the UI
           const mapped = (data || []).map((row: any) => ({
             id: row.id,
             type: row.content_type as ContentType,
